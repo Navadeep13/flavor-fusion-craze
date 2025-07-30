@@ -5,17 +5,16 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { ShoppingCart, Eye, Search } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { allRecipes } from "@/utils/recipeData";
 import Cart from "@/components/Cart";
-import PaymentModal from "@/components/PaymentModal";
 import ChatBot from "@/components/ChatBot";
 import { useToast } from "@/hooks/use-toast";
 
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [cart, setCart] = useState<number[]>([]);
-  const [paymentModalOpen, setPaymentModalOpen] = useState(false);
+  const navigate = useNavigate();
   const { toast } = useToast();
 
   const addToCart = (recipeId: number) => {
@@ -100,7 +99,7 @@ const Home = () => {
                 <Cart 
                   cart={cart} 
                   setCart={setCart} 
-                  onProceedToPayment={() => setPaymentModalOpen(true)}
+                  onProceedToPayment={() => navigate("/order/1")}
                 />
               </div>
             )}
@@ -179,14 +178,6 @@ const Home = () => {
           </div>
         </section>
       </div>
-      
-      {/* Payment Modal */}
-      <PaymentModal
-        open={paymentModalOpen}
-        onOpenChange={setPaymentModalOpen}
-        totalAmount={getTotalAmount()}
-        onPaymentComplete={handlePaymentComplete}
-      />
       
       {/* ChatBot */}
       <ChatBot />
