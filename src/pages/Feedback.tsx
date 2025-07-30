@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Star, Heart, Smile, Frown, Meh, ThumbsUp } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import restaurantBg from "@/assets/restaurant-food-bg.jpg";
 
 interface Feedback {
   id: number;
@@ -122,7 +123,12 @@ const Feedback = () => {
     <Layout isAuthenticated={true}>
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-card/30">
         {/* Hero Section */}
-        <section className="bg-gradient-hero py-16 px-4">
+        <section 
+          className="bg-gradient-hero py-16 px-4 relative bg-cover bg-center bg-no-repeat"
+          style={{ 
+            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4)), url(${restaurantBg})` 
+          }}
+        >
           <div className="max-w-4xl mx-auto text-center text-primary-foreground">
             <Heart className="h-16 w-16 mx-auto mb-6 animate-float" />
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
