@@ -16,6 +16,7 @@ import {
   Phone,
   ArrowLeft
 } from "lucide-react";
+import restaurantBg from "@/assets/restaurant-food-bg.jpg";
 
 interface OrderStatus {
   id: string;
@@ -153,7 +154,12 @@ const OrderTracking = () => {
     <Layout isAuthenticated={true}>
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-card/30">
         {/* Header */}
-        <section className="bg-gradient-hero py-16 px-4">
+        <section 
+          className="bg-gradient-hero py-16 px-4 relative bg-cover bg-center bg-no-repeat"
+          style={{ 
+            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4)), url(${restaurantBg})` 
+          }}
+        >
           <div className="max-w-4xl mx-auto text-center text-primary-foreground">
             <div className="flex items-center justify-center mb-6">
               <Button
