@@ -50,7 +50,7 @@ const OrderOnline = () => {
   };
 
   const handlePaymentComplete = () => {
-    navigate("/thank-you", { 
+    navigate("/order-success", { 
       state: { 
         orderData: {
           ...orderData,

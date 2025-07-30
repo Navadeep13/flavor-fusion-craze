@@ -13,6 +13,8 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import RecipeDetails from "./pages/RecipeDetails";
 import OrderOnline from "./pages/OrderOnline";
+import OrderSuccess from "./pages/OrderSuccess";
+import OrderTracking from "./pages/OrderTracking";
 import ThankYou from "./pages/ThankYou";
 import NotFound from "./pages/NotFound";
 
@@ -35,6 +37,8 @@ const App = () => (
           <Route path="/profile" element={<Profile />} />
           <Route path="/recipe/:id" element={<RecipeDetails />} />
           <Route path="/order/:recipeId" element={<OrderOnline />} />
+          <Route path="/order-success" element={<OrderSuccess />} />
+          <Route path="/track-order/:orderId" element={<OrderTracking />} />
           <Route path="/thank-you" element={<ThankYou />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, ChefHat } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Menu, X, ChefHat, Truck, Package } from "lucide-react";
 
 interface NavbarProps {
   isAuthenticated?: boolean;
@@ -9,7 +12,17 @@ interface NavbarProps {
 
 const Navbar = ({ isAuthenticated = false }: NavbarProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [trackOrderOpen, setTrackOrderOpen] = useState(false);
+  const [orderId, setOrderId] = useState("");
   const navigate = useNavigate();
+
+  const handleTrackOrder = () => {
+    if (orderId.trim()) {
+      navigate(`/track-order/${orderId.trim()}`);
+      setTrackOrderOpen(false);
+      setOrderId("");
+    }
+  };
 
   const handleLogout = () => {
     // Logout logic will be implemented with authentication
@@ -50,6 +63,35 @@ const Navbar = ({ isAuthenticated = false }: NavbarProps) => {
             
             {isAuthenticated ? (
               <div className="flex items-center space-x-4">
+                <Dialog open={trackOrderOpen} onOpenChange={setTrackOrderOpen}>
+                  <DialogTrigger asChild>
+                    <Button variant="ghost" size="sm">
+                      <Truck className="h-4 w-4 mr-2" />
+                      Track Order
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Track Your Order</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="orderId">Order ID</Label>
+                        <Input
+                          id="orderId"
+                          placeholder="Enter your order ID (e.g., CC123456789)"
+                          value={orderId}
+                          onChange={(e) => setOrderId(e.target.value)}
+                          onKeyPress={(e) => e.key === 'Enter' && handleTrackOrder()}
+                        />
+                      </div>
+                      <Button onClick={handleTrackOrder} className="w-full" disabled={!orderId.trim()}>
+                        <Package className="h-4 w-4 mr-2" />
+                        Track Order
+                      </Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
                 <Link to="/profile">
                   <Button variant="ghost">Profile</Button>
                 </Link>
@@ -98,6 +140,17 @@ const Navbar = ({ isAuthenticated = false }: NavbarProps) => {
               
               {isAuthenticated ? (
                 <div className="pt-4 space-y-2">
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-start"
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      setTrackOrderOpen(true);
+                    }}
+                  >
+                    <Truck className="h-4 w-4 mr-2" />
+                    Track Order
+                  </Button>
                   <Link to="/profile" onClick={() => setIsMenuOpen(false)}>
                     <Button variant="ghost" className="w-full justify-start">
                       Profile
