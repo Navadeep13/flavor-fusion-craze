@@ -1,62 +1,44 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Clock, Users, Flame, Heart, ShoppingCart, Play } from "lucide-react";
+import { getRecipeById, Recipe } from "@/utils/recipeData";
 
 const RecipeDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const [recipe, setRecipe] = useState<Recipe | null>(null);
 
-  // Mock recipe data - in real app, this would be fetched based on ID
-  const recipe = {
-    id: parseInt(id || "1"),
-    name: "Spicy Korean Fusion Ramen",
-    image: "🍜",
-    calories: 380,
-    price: 299,
-    servingSize: 2,
-    prepTime: "15 mins",
-    cookTime: "20 mins",
-    difficulty: "Medium",
-    category: "Spicy",
-    healthAdvantages: [
-      "Rich in protein and fiber",
-      "Contains antioxidants from vegetables",
-      "Good source of vitamins A and C",
-      "Supports digestive health"
-    ],
-    ingredients: [
-      { name: "Ramen noodles", quantity: "200g", calories: 220 },
-      { name: "Kimchi", quantity: "100g", calories: 15 },
-      { name: "Chicken breast", quantity: "150g", calories: 165 },
-      { name: "Spring onions", quantity: "2 stalks", calories: 10 },
-      { name: "Sesame oil", quantity: "1 tbsp", calories: 40 },
-      { name: "Gochujang paste", quantity: "2 tbsp", calories: 30 },
-      { name: "Garlic", quantity: "3 cloves", calories: 12 },
-      { name: "Soy sauce", quantity: "2 tbsp", calories: 8 }
-    ],
-    instructions: [
-      "Prepare all ingredients by chopping vegetables and slicing chicken into thin strips.",
-      "Heat sesame oil in a large pot over medium-high heat.",
-      "Add minced garlic and cook until fragrant, about 30 seconds.",
-      "Add chicken strips and cook until golden brown, about 5-7 minutes.",
-      "Stir in gochujang paste and cook for another minute.",
-      "Add 4 cups of water and bring to a boil.",
-      "Add ramen noodles and cook according to package instructions.",
-      "Stir in kimchi and soy sauce, cook for 2 more minutes.",
-      "Garnish with chopped spring onions and serve hot.",
-      "Enjoy your fusion Korean ramen with a modern twist!"
-    ],
-    youtubeVideo: "dQw4w9WgXcQ", // Mock video ID
-    cookTips: [
-      "Don't overcook the noodles - they should be slightly firm",
-      "Adjust spice level by adding more or less gochujang",
-      "For extra richness, add a soft-boiled egg on top",
-      "Fresh kimchi works better than overly fermented ones"
-    ]
-  };
+  useEffect(() => {
+    if (id) {
+      const foundRecipe = getRecipeById(parseInt(id));
+      if (foundRecipe) {
+        setRecipe(foundRecipe);
+      } else {
+        // If recipe not found, redirect to home
+        navigate("/home");
+      }
+    }
+  }, [id, navigate]);
+
+  if (!recipe) {
+    return (
+      <Layout isAuthenticated={true}>
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold mb-4">Recipe not found</h2>
+            <Link to="/home">
+              <Button variant="hero">Back to Home</Button>
+            </Link>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   const totalCalories = recipe.ingredients.reduce((sum, ingredient) => sum + ingredient.calories, 0);
 
@@ -78,8 +60,12 @@ const RecipeDetails = () => {
           <div className="grid lg:grid-cols-2 gap-8 mb-12">
             <Card className="bg-gradient-card shadow-elegant">
               <CardContent className="p-8 text-center">
-                <div className="text-8xl mb-6 animate-bounce-gentle">
-                  {recipe.image}
+                <div className="w-full h-64 mb-6 rounded-lg overflow-hidden">
+                  <img 
+                    src={recipe.image} 
+                    alt={recipe.name}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <h1 className="text-3xl md:text-4xl font-bold mb-4">{recipe.name}</h1>
                 <div className="flex flex-wrap justify-center gap-2 mb-6">
