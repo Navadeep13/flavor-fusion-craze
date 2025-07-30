@@ -15,6 +15,7 @@ import { useToast } from "@/hooks/use-toast";
 const Home = () => {
   const [selectedChoice, setSelectedChoice] = useState<string>("");
   const [selectedMood, setSelectedMood] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [cart, setCart] = useState<number[]>([]);
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
   const { toast } = useToast();
@@ -44,13 +45,31 @@ const Home = () => {
   };
 
   const getCurrentRecipes = () => {
+    let recipes: any[] = [];
+    
     if (selectedChoice && recipesByChoice[selectedChoice as keyof typeof recipesByChoice]) {
-      return recipesByChoice[selectedChoice as keyof typeof recipesByChoice];
+      recipes = recipesByChoice[selectedChoice as keyof typeof recipesByChoice];
+    } else if (selectedMood && recipesByMood[selectedMood as keyof typeof recipesByMood]) {
+      recipes = recipesByMood[selectedMood as keyof typeof recipesByMood];
     }
-    if (selectedMood && recipesByMood[selectedMood as keyof typeof recipesByMood]) {
-      return recipesByMood[selectedMood as keyof typeof recipesByMood];
+
+    // Filter by search query if provided
+    if (searchQuery.trim()) {
+      const allRecipes = [...Object.values(recipesByChoice).flat(), ...Object.values(recipesByMood).flat()];
+      const uniqueRecipes = allRecipes.filter((recipe, index, self) => 
+        self.findIndex(r => r.id === recipe.id) === index
+      );
+      
+      return uniqueRecipes.filter(recipe =>
+        recipe.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        recipe.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        recipe.ingredients.some(ingredient => 
+          ingredient.name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      );
     }
-    return [];
+    
+    return recipes;
   };
 
   return (
@@ -68,11 +87,13 @@ const Home = () => {
             
             {/* Search Bar */}
             <div className="max-w-2xl mx-auto relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-foreground/60 h-5 w-5" />
               <input
                 type="text"
                 placeholder="Search for recipes, ingredients, or cuisines..."
-                className="w-full pl-12 pr-4 py-4 rounded-lg bg-background/90 backdrop-blur-md border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-12 pr-4 py-4 rounded-lg bg-background/90 backdrop-blur-md border border-border/50 text-foreground placeholder:text-foreground/60 focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent"
               />
             </div>
           </div>
@@ -184,10 +205,33 @@ const Home = () => {
             )}
 
             {/* Empty State */}
-            {!selectedChoice && !selectedMood && (
+            {!selectedChoice && !selectedMood && !searchQuery.trim() && (
               <div className="text-center py-12">
                 <h3 className="text-2xl font-semibold mb-4">Ready to discover amazing recipes?</h3>
-                <p className="text-muted-foreground mb-8">Choose your preference or mood to get started!</p>
+                <p className="text-muted-foreground mb-8">Choose your preference, mood, or search to get started!</p>
+              </div>
+            )}
+
+            {/* No Results State */}
+            {(selectedChoice || selectedMood || searchQuery.trim()) && getCurrentRecipes().length === 0 && (
+              <div className="text-center py-12">
+                <h3 className="text-2xl font-semibold mb-4">No recipes found</h3>
+                <p className="text-muted-foreground mb-8">
+                  {searchQuery.trim() 
+                    ? `No recipes match "${searchQuery}". Try a different search term.`
+                    : "No recipes available for this selection. Try a different option."
+                  }
+                </p>
+                <Button 
+                  variant="outline" 
+                  onClick={() => {
+                    setSearchQuery("");
+                    setSelectedChoice("");
+                    setSelectedMood("");
+                  }}
+                >
+                  Clear All Filters
+                </Button>
               </div>
             )}
           </div>
