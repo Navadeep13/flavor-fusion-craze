@@ -9,9 +9,10 @@ import { allRecipes, Recipe } from "@/utils/recipeData";
 interface CartProps {
   cart: number[];
   setCart: (cart: number[]) => void;
+  onProceedToPayment?: () => void;
 }
 
-const Cart = ({ cart, setCart }: CartProps) => {
+const Cart = ({ cart, setCart, onProceedToPayment }: CartProps) => {
   const [open, setOpen] = useState(false);
 
   const cartItems = cart.reduce((acc, recipeId) => {
@@ -111,7 +112,13 @@ const Cart = ({ cart, setCart }: CartProps) => {
                 <div className="flex justify-between items-center mb-4">
                   <span className="text-lg font-semibold">Total: ₹{totalPrice}</span>
                 </div>
-                <Button className="w-full" onClick={() => setOpen(false)}>
+                <Button 
+                  className="w-full" 
+                  onClick={() => {
+                    setOpen(false);
+                    onProceedToPayment?.();
+                  }}
+                >
                   Proceed to Payment
                 </Button>
               </div>

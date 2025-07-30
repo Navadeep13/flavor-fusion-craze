@@ -97,7 +97,11 @@ const Home = () => {
             {/* Cart Info */}
             {cart.length > 0 && (
               <div className="mb-8 text-center">
-                <Cart cart={cart} setCart={setCart} />
+                <Cart 
+                  cart={cart} 
+                  setCart={setCart} 
+                  onProceedToPayment={() => setPaymentModalOpen(true)}
+                />
               </div>
             )}
 
