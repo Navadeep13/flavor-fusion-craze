@@ -27,6 +27,15 @@ interface OrderStatus {
 const OrderTracking = () => {
   const { orderId } = useParams();
   const navigate = useNavigate();
+  
+  // Redirect to home if no orderId provided or invalid format
+  useEffect(() => {
+    if (!orderId || !orderId.startsWith('CC') || orderId.length < 5) {
+      navigate('/');
+      return;
+    }
+  }, [orderId, navigate]);
+  
   const [orderStatus, setOrderStatus] = useState<OrderStatus>({
     id: orderId || "CC" + Date.now(),
     status: "confirmed",
