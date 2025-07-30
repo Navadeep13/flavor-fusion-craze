@@ -96,14 +96,8 @@ const Home = () => {
 
             {/* Cart Info */}
             {cart.length > 0 && (
-              <div className="mb-8 text-center space-x-4">
+              <div className="mb-8 text-center">
                 <Cart cart={cart} setCart={setCart} />
-                <Button 
-                  onClick={() => setPaymentModalOpen(true)}
-                  className="bg-gradient-primary hover:opacity-90"
-                >
-                  Checkout (₹{getTotalAmount()})
-                </Button>
               </div>
             )}
 
