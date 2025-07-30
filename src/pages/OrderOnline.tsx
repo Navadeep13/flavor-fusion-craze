@@ -10,20 +10,16 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { MapPin, User, Phone, CreditCard, ShoppingCart } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { allRecipes } from "@/utils/recipeData";
+import PaymentModal from "@/components/PaymentModal";
 
 const OrderOnline = () => {
   const { recipeId } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // Mock recipe data - in real app, this would be fetched based on recipeId
-  const recipe = {
-    id: parseInt(recipeId || "1"),
-    name: "Spicy Korean Fusion Ramen",
-    image: "🍜",
-    price: 299,
-    calories: 380
-  };
+  // Get recipe from data
+  const recipe = allRecipes.find(r => r.id === parseInt(recipeId || "1")) || allRecipes[0];
 
   const [orderData, setOrderData] = useState({
     recipeName: recipe.name,
@@ -35,6 +31,7 @@ const OrderOnline = () => {
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,27 +39,27 @@ const OrderOnline = () => {
 
     // Simulate order processing
     setTimeout(() => {
-      // In real app, this would make an API call to store the order
-      console.log("Order submitted:", orderData);
+      setIsLoading(false);
+      setShowPayment(true);
       
       toast({
-        title: "Order Placed Successfully!",
-        description: "Redirecting to payment...",
+        title: "Order Details Confirmed!",
+        description: "Please proceed with payment.",
       });
-
-      // Navigate to thank you page
-      navigate("/thank-you", { 
-        state: { 
-          orderData: {
-            ...orderData,
-            totalAmount: orderData.quantity * recipe.price,
-            orderId: `CC${Date.now()}`,
-            estimatedDelivery: "30-45 minutes"
-          }
-        }
-      });
-      setIsLoading(false);
     }, 1500);
+  };
+
+  const handlePaymentComplete = () => {
+    navigate("/thank-you", { 
+      state: { 
+        orderData: {
+          ...orderData,
+          totalAmount: finalAmount,
+          orderId: `CC${Date.now()}`,
+          estimatedDelivery: "30-45 minutes"
+        }
+      }
+    });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -107,19 +104,23 @@ const OrderOnline = () => {
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-6">
                   {/* Recipe Selection */}
-                  <div className="space-y-2">
-                    <Label>Selected Recipe</Label>
-                    <div className="p-4 bg-background/50 rounded-lg flex items-center space-x-4">
-                      <div className="text-4xl">{recipe.image}</div>
-                      <div className="flex-1">
-                        <p className="font-semibold">{recipe.name}</p>
-                        <div className="flex items-center space-x-2 mt-1">
-                          <Badge variant="accent">₹{recipe.price}</Badge>
-                          <Badge variant="outline">{recipe.calories} kcal</Badge>
+                    <div className="space-y-2">
+                      <Label>Selected Recipe</Label>
+                      <div className="p-4 bg-background/50 rounded-lg flex items-center space-x-4">
+                        <img 
+                          src={recipe.image} 
+                          alt={recipe.name}
+                          className="w-16 h-16 object-cover rounded-lg"
+                        />
+                        <div className="flex-1">
+                          <p className="font-semibold">{recipe.name}</p>
+                          <div className="flex items-center space-x-2 mt-1">
+                            <Badge variant="accent">₹{recipe.price}</Badge>
+                            <Badge variant="outline">{recipe.calories} kcal</Badge>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
 
                   {/* Quantity */}
                   <div className="space-y-2">
@@ -296,6 +297,13 @@ const OrderOnline = () => {
           </div>
         </div>
       </div>
+
+      <PaymentModal
+        open={showPayment}
+        onOpenChange={setShowPayment}
+        totalAmount={finalAmount}
+        onPaymentComplete={handlePaymentComplete}
+      />
     </Layout>
   );
 };
