@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Clock, Users, Flame, Heart, ShoppingCart, Play } from "lucide-react";
 import { getRecipeById, Recipe } from "@/utils/recipeData";
+import restaurantBg from "@/assets/restaurant-food-bg.jpg";
 
 const RecipeDetails = () => {
   const { id } = useParams();
@@ -45,8 +46,31 @@ const RecipeDetails = () => {
   return (
     <Layout isAuthenticated={true}>
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-card/30">
+        {/* Hero Section with Background */}
+        <section 
+          className="bg-gradient-hero py-8 px-4 relative bg-cover bg-center bg-no-repeat"
+          style={{ 
+            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4)), url(${restaurantBg})` 
+          }}
+        >
+          <div className="max-w-4xl mx-auto">
+            <Link to="/home">
+              <Button variant="ghost" className="text-primary-foreground hover:bg-white/20 mb-4">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to Recipes
+              </Button>
+            </Link>
+            <div className="text-center text-primary-foreground">
+              <h1 className="text-3xl md:text-5xl font-bold mb-4">{recipe.name}</h1>
+              <p className="text-lg md:text-xl opacity-90">
+                Discover the perfect recipe for your taste
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* Back Button */}
-        <div className="p-4">
+        <div className="p-4" style={{ display: 'none' }}>
           <Link to="/home">
             <Button variant="ghost" className="mb-4">
               <ArrowLeft className="h-4 w-4 mr-2" />
