@@ -6,15 +6,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { ShoppingCart, Eye, Search } from "lucide-react";
 import { Link } from "react-router-dom";
-import { recipesByChoice, recipesByMood } from "@/utils/recipeData";
+import { allRecipes } from "@/utils/recipeData";
 import Cart from "@/components/Cart";
 import PaymentModal from "@/components/PaymentModal";
 import ChatBot from "@/components/ChatBot";
 import { useToast } from "@/hooks/use-toast";
 
 const Home = () => {
-  const [selectedChoice, setSelectedChoice] = useState<string>("");
-  const [selectedMood, setSelectedMood] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [cart, setCart] = useState<number[]>([]);
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
@@ -30,8 +28,7 @@ const Home = () => {
 
   const getTotalAmount = () => {
     return cart.reduce((total, recipeId) => {
-      const recipe = [...Object.values(recipesByChoice).flat(), ...Object.values(recipesByMood).flat()]
-        .find(r => r.id === recipeId);
+      const recipe = allRecipes.find(r => r.id === recipeId);
       return total + (recipe?.price || 0);
     }, 0);
   };
@@ -45,22 +42,9 @@ const Home = () => {
   };
 
   const getCurrentRecipes = () => {
-    let recipes: any[] = [];
-    
-    if (selectedChoice && recipesByChoice[selectedChoice as keyof typeof recipesByChoice]) {
-      recipes = recipesByChoice[selectedChoice as keyof typeof recipesByChoice];
-    } else if (selectedMood && recipesByMood[selectedMood as keyof typeof recipesByMood]) {
-      recipes = recipesByMood[selectedMood as keyof typeof recipesByMood];
-    }
-
     // Filter by search query if provided
     if (searchQuery.trim()) {
-      const allRecipes = [...Object.values(recipesByChoice).flat(), ...Object.values(recipesByMood).flat()];
-      const uniqueRecipes = allRecipes.filter((recipe, index, self) => 
-        self.findIndex(r => r.id === recipe.id) === index
-      );
-      
-      return uniqueRecipes.filter(recipe =>
+      return allRecipes.filter(recipe =>
         recipe.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         recipe.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
         recipe.ingredients.some(ingredient => 
@@ -69,7 +53,8 @@ const Home = () => {
       );
     }
     
-    return recipes;
+    // Return all recipes if no search
+    return allRecipes;
   };
 
   return (
@@ -99,48 +84,14 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Filter Section */}
+        {/* Recipes Section */}
         <section className="py-12 px-4">
           <div className="max-w-7xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-8 mb-12">
-              {/* Choose by Choice */}
-              <Card className="bg-gradient-card shadow-elegant hover:shadow-glow transition-all duration-300">
-                <CardHeader>
-                  <CardTitle className="text-2xl text-center">Choose by Choice</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Select value={selectedChoice} onValueChange={setSelectedChoice}>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select your dietary preference" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="vegetarian">🥬 Vegetarian</SelectItem>
-                      <SelectItem value="spicy">🌶️ Spicy</SelectItem>
-                      <SelectItem value="healthy">💚 Healthy</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </CardContent>
-              </Card>
-
-              {/* Choose by Mood */}
-              <Card className="bg-gradient-card shadow-elegant hover:shadow-glow transition-all duration-300">
-                <CardHeader>
-                  <CardTitle className="text-2xl text-center">Choose by Mood</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Select value={selectedMood} onValueChange={setSelectedMood}>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="How are you feeling today?" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="happy">😊 Happy</SelectItem>
-                      <SelectItem value="lazy">😴 Lazy</SelectItem>
-                      <SelectItem value="sad">😢 Sad</SelectItem>
-                      <SelectItem value="party">🎉 Party</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </CardContent>
-              </Card>
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4">Our Recipe Collection</h2>
+              <p className="text-muted-foreground text-lg">
+                Discover {allRecipes.length} delicious recipes from around the world
+              </p>
             </div>
 
             {/* Cart Info */}
@@ -205,32 +156,25 @@ const Home = () => {
             )}
 
             {/* Empty State */}
-            {!selectedChoice && !selectedMood && !searchQuery.trim() && (
+            {!searchQuery.trim() && getCurrentRecipes().length === 0 && (
               <div className="text-center py-12">
-                <h3 className="text-2xl font-semibold mb-4">Ready to discover amazing recipes?</h3>
-                <p className="text-muted-foreground mb-8">Choose your preference, mood, or search to get started!</p>
+                <h3 className="text-2xl font-semibold mb-4">Welcome to our Recipe Collection!</h3>
+                <p className="text-muted-foreground mb-8">Browse through our delicious recipes or use the search bar to find something specific.</p>
               </div>
             )}
 
             {/* No Results State */}
-            {(selectedChoice || selectedMood || searchQuery.trim()) && getCurrentRecipes().length === 0 && (
+            {searchQuery.trim() && getCurrentRecipes().length === 0 && (
               <div className="text-center py-12">
                 <h3 className="text-2xl font-semibold mb-4">No recipes found</h3>
                 <p className="text-muted-foreground mb-8">
-                  {searchQuery.trim() 
-                    ? `No recipes match "${searchQuery}". Try a different search term.`
-                    : "No recipes available for this selection. Try a different option."
-                  }
+                  No recipes match "{searchQuery}". Try a different search term.
                 </p>
                 <Button 
                   variant="outline" 
-                  onClick={() => {
-                    setSearchQuery("");
-                    setSelectedChoice("");
-                    setSelectedMood("");
-                  }}
+                  onClick={() => setSearchQuery("")}
                 >
-                  Clear All Filters
+                  Clear Search
                 </Button>
               </div>
             )}

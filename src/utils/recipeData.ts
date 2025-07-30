@@ -970,6 +970,191 @@ export const allRecipes: Recipe[] = [
       "Adjust spice levels for all",
       "Serve immediately after assembly"
     ]
+  },
+  
+  // Additional Popular Recipes
+  {
+    id: 26,
+    name: "Chocolate Brownie",
+    calories: 420,
+    price: 199,
+    image: chickenImage,
+    category: "dessert",
+    servingSize: 4,
+    prepTime: "15 mins",
+    cookTime: "30 mins",
+    difficulty: "Easy",
+    healthAdvantages: [
+      "Rich in antioxidants from dark chocolate",
+      "Quick energy boost",
+      "Mood enhancer"
+    ],
+    ingredients: [
+      { name: "Dark chocolate", quantity: "200g", calories: 540 },
+      { name: "Butter", quantity: "100g", calories: 717 },
+      { name: "Sugar", quantity: "150g", calories: 580 },
+      { name: "Eggs", quantity: "2", calories: 140 }
+    ],
+    instructions: [
+      "Melt chocolate and butter together",
+      "Mix in sugar and eggs",
+      "Fold in flour gently",
+      "Bake for 25-30 minutes"
+    ],
+    youtubeVideo: "https://www.youtube.com/watch?v=chocolate-brownie",
+    cookTips: [
+      "Don't overmix the batter",
+      "Use good quality dark chocolate",
+      "Check with toothpick for doneness"
+    ]
+  },
+  
+  {
+    id: 27,
+    name: "Grilled Chicken Salad",
+    calories: 285,
+    price: 329,
+    image: chickenImage,
+    category: "healthy",
+    servingSize: 2,
+    prepTime: "20 mins",
+    cookTime: "15 mins",
+    difficulty: "Easy",
+    healthAdvantages: [
+      "High protein content",
+      "Low in carbs",
+      "Rich in vitamins",
+      "Supports weight management"
+    ],
+    ingredients: [
+      { name: "Chicken breast", quantity: "300g", calories: 495 },
+      { name: "Mixed greens", quantity: "100g", calories: 20 },
+      { name: "Cherry tomatoes", quantity: "100g", calories: 18 },
+      { name: "Cucumber", quantity: "1", calories: 16 }
+    ],
+    instructions: [
+      "Season and grill chicken breast",
+      "Prepare fresh salad vegetables",
+      "Slice grilled chicken",
+      "Toss everything with dressing"
+    ],
+    youtubeVideo: "https://www.youtube.com/watch?v=grilled-chicken-salad",
+    cookTips: [
+      "Don't overcook the chicken",
+      "Let chicken rest before slicing",
+      "Use fresh seasonal vegetables"
+    ]
+  },
+  
+  {
+    id: 28,
+    name: "Vegetable Stir Fry",
+    calories: 195,
+    price: 229,
+    image: paneerImage,
+    category: "vegetarian",
+    servingSize: 3,
+    prepTime: "15 mins",
+    cookTime: "10 mins",
+    difficulty: "Easy",
+    healthAdvantages: [
+      "Rich in vitamins and minerals",
+      "High fiber content",
+      "Low calorie option",
+      "Antioxidant rich"
+    ],
+    ingredients: [
+      { name: "Mixed vegetables", quantity: "400g", calories: 80 },
+      { name: "Soy sauce", quantity: "2 tbsp", calories: 10 },
+      { name: "Garlic", quantity: "3 cloves", calories: 13 },
+      { name: "Ginger", quantity: "1 inch", calories: 4 }
+    ],
+    instructions: [
+      "Heat oil in a wok",
+      "Add garlic and ginger",
+      "Stir fry vegetables quickly",
+      "Add sauce and toss"
+    ],
+    youtubeVideo: "https://www.youtube.com/watch?v=vegetable-stir-fry",
+    cookTips: [
+      "Keep vegetables crisp",
+      "Cook on high heat",
+      "Don't overcrowd the pan"
+    ]
+  },
+  
+  {
+    id: 29,
+    name: "Mango Lassi",
+    calories: 165,
+    price: 149,
+    image: dalImage,
+    category: "beverages",
+    servingSize: 2,
+    prepTime: "5 mins",
+    cookTime: "0 mins",
+    difficulty: "Very Easy",
+    healthAdvantages: [
+      "Rich in vitamin C",
+      "Probiotic benefits",
+      "Cooling and refreshing",
+      "Good for digestion"
+    ],
+    ingredients: [
+      { name: "Ripe mango", quantity: "1 large", calories: 135 },
+      { name: "Yogurt", quantity: "200ml", calories: 110 },
+      { name: "Sugar", quantity: "2 tbsp", calories: 96 },
+      { name: "Cardamom", quantity: "2 pods", calories: 5 }
+    ],
+    instructions: [
+      "Peel and chop mango",
+      "Blend with yogurt and sugar",
+      "Add cardamom powder",
+      "Serve chilled with ice"
+    ],
+    youtubeVideo: "https://www.youtube.com/watch?v=mango-lassi",
+    cookTips: [
+      "Use perfectly ripe mangoes",
+      "Adjust sugar to taste",
+      "Chill before serving"
+    ]
+  },
+  
+  {
+    id: 30,
+    name: "Fish Curry",
+    calories: 310,
+    price: 379,
+    image: chickenImage,
+    category: "spicy",
+    servingSize: 4,
+    prepTime: "20 mins",
+    cookTime: "25 mins",
+    difficulty: "Medium",
+    healthAdvantages: [
+      "High in omega-3 fatty acids",
+      "Rich in protein",
+      "Good for heart health",
+      "Brain boosting nutrients"
+    ],
+    ingredients: [
+      { name: "Fish fillets", quantity: "500g", calories: 825 },
+      { name: "Coconut milk", quantity: "400ml", calories: 552 },
+      { name: "Curry leaves", quantity: "10", calories: 1 },
+      { name: "Red chilies", quantity: "4", calories: 8 }
+    ],
+    instructions: [
+      "Marinate fish with spices",
+      "Prepare curry base with coconut milk",
+      "Add fish and simmer gently",
+      "Garnish with curry leaves"
+    ],
+    youtubeVideo: "https://www.youtube.com/watch?v=fish-curry",
+    cookTips: [
+      "Don't overcook the fish",
+      "Use fresh coconut milk",
+      "Adjust spice level to taste"
+    ]
   }
 ];
 
