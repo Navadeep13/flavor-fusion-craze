@@ -980,22 +980,10 @@ export const recipesByChoice = {
 };
 
 export const recipesByMood = {
-  happy: allRecipes.filter(recipe => recipe.category === "party" || recipe.id === 61),
-  lazy: [
-    { id: 51, name: "Instant Maggi Masala", calories: 350, price: 49, image: dalImage, category: "lazy" },
-    { id: 52, name: "Ready-to-Eat Poha", calories: 220, price: 79, image: quinoaImage, category: "lazy" },
-    { id: 53, name: "Microwave Khichdi", calories: 280, price: 99, image: quinoaImage, category: "lazy" },
-    { id: 54, name: "Quick Bread Pakora", calories: 320, price: 69, image: samosaImage, category: "lazy" },
-    { id: 55, name: "Instant Chai & Biscuit", calories: 150, price: 39, image: dalImage, category: "lazy" },
-  ],
-  sad: [
-    { id: 56, name: "Comfort Rajma Chawal", calories: 380, price: 189, image: dalImage, category: "sad" },
-    { id: 57, name: "Warm Gajar Halwa", calories: 320, price: 159, image: samosaImage, category: "sad" },
-    { id: 58, name: "Hot Tomato Shorba", calories: 120, price: 89, image: dalImage, category: "sad" },
-    { id: 59, name: "Comforting Dal Rice", calories: 280, price: 139, image: dalImage, category: "sad" },
-    { id: 60, name: "Warm Milk with Turmeric", calories: 100, price: 59, image: quinoaImage, category: "sad" },
-  ],
-  party: [allRecipes.find(recipe => recipe.id === 61)!]
+  happy: allRecipes.filter(recipe => recipe.category === "vegetarian").slice(0, 6),
+  lazy: allRecipes.filter(recipe => recipe.category === "healthy").slice(0, 6),
+  sad: allRecipes.filter(recipe => recipe.category === "spicy").slice(0, 6),
+  party: allRecipes.filter(recipe => recipe.category === "party")
 };
 
 export const getRecipeById = (id: number): Recipe | undefined => {

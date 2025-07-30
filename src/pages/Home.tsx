@@ -7,14 +7,40 @@ import { Badge } from "@/components/ui/badge";
 import { ShoppingCart, Eye, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import { recipesByChoice, recipesByMood } from "@/utils/recipeData";
+import Cart from "@/components/Cart";
+import PaymentModal from "@/components/PaymentModal";
+import ChatBot from "@/components/ChatBot";
+import { useToast } from "@/hooks/use-toast";
 
 const Home = () => {
   const [selectedChoice, setSelectedChoice] = useState<string>("");
   const [selectedMood, setSelectedMood] = useState<string>("");
   const [cart, setCart] = useState<number[]>([]);
+  const [paymentModalOpen, setPaymentModalOpen] = useState(false);
+  const { toast } = useToast();
 
   const addToCart = (recipeId: number) => {
     setCart([...cart, recipeId]);
+    toast({
+      title: "Added to cart!",
+      description: "Recipe has been added to your cart.",
+    });
+  };
+
+  const getTotalAmount = () => {
+    return cart.reduce((total, recipeId) => {
+      const recipe = [...Object.values(recipesByChoice).flat(), ...Object.values(recipesByMood).flat()]
+        .find(r => r.id === recipeId);
+      return total + (recipe?.price || 0);
+    }, 0);
+  };
+
+  const handlePaymentComplete = () => {
+    setCart([]);
+    toast({
+      title: "Order Confirmed!",
+      description: "Your delicious recipes are on their way!",
+    });
   };
 
   const getCurrentRecipes = () => {
@@ -98,11 +124,14 @@ const Home = () => {
 
             {/* Cart Info */}
             {cart.length > 0 && (
-              <div className="mb-8 text-center">
-                <Badge variant="secondary" className="text-lg px-4 py-2">
-                  <ShoppingCart className="h-4 w-4 mr-2" />
-                  {cart.length} items in cart
-                </Badge>
+              <div className="mb-8 text-center space-x-4">
+                <Cart cart={cart} setCart={setCart} />
+                <Button 
+                  onClick={() => setPaymentModalOpen(true)}
+                  className="bg-gradient-primary hover:opacity-90"
+                >
+                  Checkout (₹{getTotalAmount()})
+                </Button>
               </div>
             )}
 
@@ -164,6 +193,17 @@ const Home = () => {
           </div>
         </section>
       </div>
+      
+      {/* Payment Modal */}
+      <PaymentModal
+        open={paymentModalOpen}
+        onOpenChange={setPaymentModalOpen}
+        totalAmount={getTotalAmount()}
+        onPaymentComplete={handlePaymentComplete}
+      />
+      
+      {/* ChatBot */}
+      <ChatBot />
     </Layout>
   );
 };
