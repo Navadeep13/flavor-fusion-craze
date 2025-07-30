@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -5,10 +6,15 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User, Mail, MapPin, Phone, Calendar, Heart, ShoppingCart, Star } from "lucide-react";
 import restaurantBg from "@/assets/restaurant-food-bg.jpg";
+import EditProfileModal from "@/components/EditProfileModal";
+import ChangePasswordModal from "@/components/ChangePasswordModal";
 
 const Profile = () => {
+  const [showEditProfile, setShowEditProfile] = useState(false);
+  const [showChangePassword, setShowChangePassword] = useState(false);
+  
   // Mock user data
-  const user = {
+  const [user, setUser] = useState({
     name: "John Doe",
     email: "john.doe@example.com",
     phone: "+91 9876543210",
@@ -18,7 +24,7 @@ const Profile = () => {
     favoriteRecipes: 15,
     totalOrders: 23,
     loyaltyPoints: 450
-  };
+  });
 
   const recentOrders = [
     { id: 1, recipe: "Spicy Paneer Tikka", date: "2025-01-25", status: "Delivered", amount: 299 },
@@ -108,10 +114,17 @@ const Profile = () => {
                 </div>
                 
                 <div className="pt-4">
-                  <Button variant="hero" className="mr-4">
+                  <Button 
+                    variant="hero" 
+                    className="mr-4"
+                    onClick={() => setShowEditProfile(true)}
+                  >
                     Edit Profile
                   </Button>
-                  <Button variant="outline">
+                  <Button 
+                    variant="outline"
+                    onClick={() => setShowChangePassword(true)}
+                  >
                     Change Password
                   </Button>
                 </div>
@@ -216,6 +229,18 @@ const Profile = () => {
           </Card>
         </div>
       </div>
+
+      <EditProfileModal
+        open={showEditProfile}
+        onOpenChange={setShowEditProfile}
+        user={user}
+        onSave={(updatedUser) => setUser({ ...user, ...updatedUser })}
+      />
+
+      <ChangePasswordModal
+        open={showChangePassword}
+        onOpenChange={setShowChangePassword}
+      />
     </Layout>
   );
 };

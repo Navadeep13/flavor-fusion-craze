@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeOff, ChefHat, User, Mail, Lock } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { Eye, EyeOff, ChefHat, User, Mail, Lock, Phone, MapPin, Calendar } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import heroBg from "@/assets/hero-bg.jpg";
 
@@ -12,6 +13,12 @@ const Register = () => {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
+    phone: "",
+    dateOfBirth: "",
+    address: "",
+    city: "",
+    state: "",
+    pincode: "",
     password: "",
     confirmPassword: ""
   });
@@ -55,7 +62,7 @@ const Register = () => {
     }, 1000);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
@@ -127,6 +134,99 @@ const Register = () => {
                       className="pl-10 transition-all duration-300 focus:shadow-card"
                     />
                   </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="phone">Phone Number</Label>
+                  <div className="relative">
+                    <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                    <Input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      placeholder="+91 9876543210"
+                      required
+                      className="pl-10 transition-all duration-300 focus:shadow-card"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="dateOfBirth">Date of Birth</Label>
+                  <div className="relative">
+                    <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                    <Input
+                      id="dateOfBirth"
+                      name="dateOfBirth"
+                      type="date"
+                      value={formData.dateOfBirth}
+                      onChange={handleChange}
+                      required
+                      className="pl-10 transition-all duration-300 focus:shadow-card"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="address">Address</Label>
+                  <div className="relative">
+                    <MapPin className="absolute left-3 top-3 text-muted-foreground h-4 w-4" />
+                    <Textarea
+                      id="address"
+                      name="address"
+                      value={formData.address}
+                      onChange={handleChange}
+                      placeholder="Enter your complete address with landmarks"
+                      required
+                      rows={3}
+                      className="pl-10 transition-all duration-300 focus:shadow-card"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="city">City</Label>
+                    <Input
+                      id="city"
+                      name="city"
+                      type="text"
+                      value={formData.city}
+                      onChange={handleChange}
+                      placeholder="City"
+                      required
+                      className="transition-all duration-300 focus:shadow-card"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="state">State</Label>
+                    <Input
+                      id="state"
+                      name="state"
+                      type="text"
+                      value={formData.state}
+                      onChange={handleChange}
+                      placeholder="State"
+                      required
+                      className="transition-all duration-300 focus:shadow-card"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="pincode">Pin Code</Label>
+                  <Input
+                    id="pincode"
+                    name="pincode"
+                    type="text"
+                    value={formData.pincode}
+                    onChange={handleChange}
+                    placeholder="Pin Code"
+                    required
+                    className="transition-all duration-300 focus:shadow-card"
+                  />
                 </div>
 
                 <div className="space-y-2">
